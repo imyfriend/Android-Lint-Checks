@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.android.tools.lint.detector.api.*;
 import io.vokal.lint.AbstractDetectorTest;
+import io.vokal.lint.rxlifecycle.detectors.RxLifecycleDetector;
 
 public class RxLifecycleDetectorTest extends AbstractDetectorTest {
 

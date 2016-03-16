@@ -1,11 +1,12 @@
-package io.vokal.lint.registry;
+package io.vokal.lint.todo.registry;
+
+import java.util.Collections;
+import java.util.List;
 
 import com.android.tools.lint.client.api.IssueRegistry;
 import com.android.tools.lint.detector.api.Issue;
-import io.vokal.lint.detectors.*;
 
-import java.util.Arrays;
-import java.util.List;
+import io.vokal.lint.todo.detectors.TodoDetector;
 
 /**
  * The list of issues that will be checked when running <code>lint</code>.
@@ -13,12 +14,9 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class CustomIssueRegistry extends IssueRegistry {
 
-    private List<Issue> mIssues = Arrays.asList(
-            RxLifecycleDetector.ISSUE
-    );
+    private List<Issue> mIssues = Collections.singletonList(TodoDetector.ISSUE);
 
-    public CustomIssueRegistry() {
-    }
+    public CustomIssueRegistry() {}
 
     @Override
     public List<Issue> getIssues() {

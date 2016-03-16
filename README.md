@@ -12,6 +12,12 @@ Checks
   compile 'io.vokal.lint:rxlifecycle:1.0.0'
 ~~~
 
+**Todo** - Warns you of `//TODO` comments in your code
+ 
+~~~gradle
+  compile 'io.vokal.lint:todo:1.0.0'
+~~~
+
 Compiling
 ---------
 
@@ -38,6 +44,8 @@ To check that the custom Lint checks are now available, run the following comman
 For example:
 
 `lint --show RxLifecycle`
+
+`lint --show Todo`
 
 And to actually run the Lint checks, try the following command from a project of your choice:
 
