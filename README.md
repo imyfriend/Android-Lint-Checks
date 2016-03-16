@@ -9,7 +9,7 @@ Checks
 **RxLifecycle** - Ensures you are binding your Observable subscriptions to the lifecycle of an Activity, Fragment or View
  
 ~~~gradle
-  compile `io.vokal.lint:rxlifecycle:1.0.0
+  compile 'io.vokal.lint:rxlifecycle:1.0.0'
 ~~~
 
 Compiling
@@ -29,12 +29,6 @@ This can be done individually as well, for example:
 
 `./gradlew clean rxlifecycle:install`
 
-If you don't want the custom Lint checks globally available, instead preferring a project-by-project basis, then there is a second option with the following script:
-
-`./gradlew aarWrapper:assemble`
-
-This wraps the JAR file and generates an aar library file in `aarWrapper/build/outputs/aar/` that may be included as a normal dependency in any Android project - either by copying it to the `libs` folder of an Android application project, adding it to a centralized dependency repo, or any other method for adding a library to a project. Lint will pick up on the inner JAR inside the dependency, thus adding the custom Lint checks to the project. 
-
 Verify
 ------------
 To check that the custom Lint checks are now available, run the following commands:
@@ -45,15 +39,16 @@ For example:
 
 `lint --show RxLifecycle`
 
-`lint --show Todo`
-
 And to actually run the Lint checks, try the following command from a project of your choice:
 
 `./gradlew lint`
 
 Alternatively, you can just use Android Studio's `Analyze->Inspect Code...` menu option.
 
-Enjoy!
+Credits
+-------
+
+This project is a modified version of [Linette](https://github.com/bignerdranch/linette).  Linette compiles all its Lint checks into one library whereas this project is modified to separte each lint check into it's own library so they can be used individually as needed.
 
 License
 -------
