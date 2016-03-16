@@ -1,12 +1,15 @@
 package io.vokal.lint.registry;
 
-import java.util.List;
-
 import com.android.tools.lint.detector.api.Issue;
-import io.vokal.lint.rxlifecycle.detectors.RxLifecycleDetector;
-import io.vokal.lint.rxlifecycle.registry.CustomIssueRegistry;
+
+import io.vokal.lint.detectors.*;
+import io.vokal.lint.todo.detectors.TodoDetector;
+import io.vokal.lint.todo.registry.CustomIssueRegistry;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,7 +43,7 @@ public class CustomIssueRegistryTest {
     @Test
     public void testGetIssues() throws Exception {
         List<Issue> actual = mCustomIssueRegistry.getIssues();
-        assertThat(actual).contains(RxLifecycleDetector.ISSUE);
+        assertThat(actual).contains(TodoDetector.ISSUE);
     }
 
 }

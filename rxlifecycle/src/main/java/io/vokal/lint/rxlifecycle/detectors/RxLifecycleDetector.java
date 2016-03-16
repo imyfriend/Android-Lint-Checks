@@ -1,4 +1,4 @@
-package io.vokal.lint.detectors;
+package io.vokal.lint.rxlifecycle.detectors;
 
 import java.util.*;
 

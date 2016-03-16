@@ -1,0 +1,89 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: "com.jfrog.artifactory"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.android.tools.lint:lint:24.3.1'
+    compile 'com.android.tools.lint:lint-api:24.3.1'
+    compile 'com.android.tools.lint:lint-checks:24.3.1'
+
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.assertj:assertj-core:3.0.0'
+
+    testCompile 'com.android.tools.lint:lint:24.3.1'
+    testCompile 'com.android.tools.lint:lint-tests:24.3.1'
+    testCompile 'com.android.tools:testutils:24.3.1'
+}
+
+version = '1.0.0'
+
+jar {
+    baseName project.group.replace(".", "-")
+    appendix project.name
+
+    manifest {
+        attributes 'Manifest-Version': 1.0
+        attributes('Lint-Registry': 'io.vokal.lint.registry.CustomIssueRegistry')
+    }
+}
+
+configurations {
+    lintChecks
+}
+
+dependencies {
+    lintChecks files(jar)
+}
+
+defaultTasks 'assemble'
+
+task install(type: Copy) {
+    from configurations.lintChecks
+    into System.getProperty('user.home') + '/.android/lint/'
+}
+
+task copyLintJar(type: Copy) {
+    from(configurations.lintChecks) {
+        rename {
+            String fileName ->
+                'lint.jar'
+        }
+    }
+    into '../aarWrapper/build/intermediates/lint/'
+}
+
+project.afterEvaluate {
+    def aarWrap = parent.project("aarWrapper").tasks.find { it.name == 'assemble' }
+    def pubTask = project.tasks.find { it.name == 'artifactoryPublish' }
+    pubTask.dependsOn(copyLintJar)
+    pubTask.dependsOn(aarWrap)
+    aarWrap.mustRunAfter(copyLintJar)
+}
+
+publishing {
+    publications {
+        aarWrapper(MavenPublication) {
+            version version
+            artifact "../aarWrapper/build/outputs/aar/aarWrapper-release.aar"
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"
+    publish {
+        repository {
+            repoKey = 'libs-release-local'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+        }
+        defaults {
+            publications('aarWrapper')
+        }
+    }
+}
