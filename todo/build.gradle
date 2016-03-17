@@ -19,7 +19,7 @@ dependencies {
     testCompile 'com.android.tools:testutils:24.3.1'
 }
 
-version = '1.0.0'
+version = '1.0.2'
 
 jar {
     baseName project.group.replace(".", "-")
@@ -27,7 +27,7 @@ jar {
 
     manifest {
         attributes 'Manifest-Version': 1.0
-        attributes('Lint-Registry': 'io.vokal.lint.registry.CustomIssueRegistry')
+        attributes('Lint-Registry': 'io.vokal.lint.todo.registry.CustomIssueRegistry')
     }
 }
 
@@ -56,6 +56,16 @@ task copyLintJar(type: Copy) {
     into '../aarWrapper/build/intermediates/lint/'
 }
 
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 project.afterEvaluate {
     def aarWrap = parent.project("aarWrapper").tasks.find { it.name == 'assemble' }
     def pubTask = project.tasks.find { it.name == 'artifactoryPublish' }
@@ -69,6 +79,8 @@ publishing {
         aarWrapper(MavenPublication) {
             version version
             artifact "../aarWrapper/build/outputs/aar/aarWrapper-release.aar"
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
 }
