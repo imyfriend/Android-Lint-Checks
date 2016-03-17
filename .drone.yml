@@ -4,7 +4,7 @@ build:
         - /home/ubuntu/android_build/android-sdk:/usr/local/android-sdk
         - /home/ubuntu/.android:/root/.android
     commands:
-        - ./gradlew build javadocJar sourcesJar
+        - ./gradlew build javadocJar sourcesJar generatePomFileForAarWrapperPublication
         - ./gradlew rxlifecycle:aarWrapper
         - ./gradlew todo:aarWrapper
 publish:
