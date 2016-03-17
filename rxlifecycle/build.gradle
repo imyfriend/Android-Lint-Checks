@@ -27,7 +27,7 @@ jar {
 
     manifest {
         attributes 'Manifest-Version': 1.0
-        attributes('Lint-Registry': 'io.vokal.lint.registry.CustomIssueRegistry')
+        attributes('Lint-Registry': 'io.vokal.lint.registry.rxlifecycle.CustomIssueRegistry')
     }
 }
 
