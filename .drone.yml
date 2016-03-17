@@ -4,9 +4,17 @@ build:
         - /home/ubuntu/android_build/android-sdk:/usr/local/android-sdk
         - /home/ubuntu/.android:/root/.android
     commands:
-        - ./gradlew build
+        - ./gradlew build javadocJar sourcesJar
+        - ./gradlew rxlifecycle:aarWrapper
+        - ./gradlew todo:aarWrapper
 publish:
-    script:
-        commands:
-            - ./gradlew todo:artPub
-            - ./gradlew rxlifecycle:artPub
+  artifactory:
+    url: $$ARTIFACTORY_URL
+    username: $$ARTIFACTORY_USER
+    password: $$ARTIFACTORY_PASSWORD
+    pom: todo/build/publications/aarWrapper/pom-default.xml 
+    repo_key: libs-release-local
+    files: 
+      - todo/build/libs/*.aar
+      - todo/build/libs/*-javadoc.jar
+      - todo/build/libs/*-sources.jar

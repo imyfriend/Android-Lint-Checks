@@ -9,5 +9,67 @@ buildscript {
 }
 
 subprojects {
+
+    if (project.name == "aarWrapper") return // Setup lint checks with the same setup
+
+    apply plugin: 'java'
     group = 'io.vokal.lint'
+
+    configurations {
+        lintChecks
+    }
+
+    dependencies {
+        lintChecks files(jar)
+    }
+
+    defaultTasks 'assemble'
+
+    task install(type: Copy) {
+        from configurations.lintChecks
+        into System.getProperty('user.home') + '/.android/lint/'
+    }
+
+    task copyLintJar(type: Copy) {
+        from(configurations.lintChecks) {
+            rename {
+                String fileName ->
+                    'lint.jar'
+            }
+        }
+        into '../aarWrapper/build/intermediates/lint/'
+    }
+
+    task copyWrappedAAR(type: Copy) {
+        from("../aarWrapper/build/outputs/aar/aarWrapper-release.aar") {
+            rename {
+                String fileName ->
+                    "${project.name}-$version-release.aar"
+            }
+        }
+        into 'build/libs/'
+    }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    task aarWrapper << { }
+
+    project.afterEvaluate {
+        def aarWrap = parent.project("aarWrapper").tasks.find { it.name == 'assemble' }
+        aarWrapper.dependsOn(copyLintJar)
+        aarWrapper.dependsOn(aarWrap)
+        aarWrapper.dependsOn(copyWrappedAAR)
+        aarWrap.mustRunAfter(copyLintJar)
+        copyWrappedAAR.mustRunAfter(aarWrap)
+
+        artifactoryPublish.dependsOn(aarWrapper)
+    }
 }
