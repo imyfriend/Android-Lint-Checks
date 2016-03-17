@@ -1,0 +1,12 @@
+build:
+    image: registry.vokal.io/android
+    volumes:
+        - /home/ubuntu/android_build/android-sdk:/usr/local/android-sdk
+        - /home/ubuntu/.android:/root/.android
+    commands:
+        - ./gradlew build
+publish:
+    script:
+        commands:
+            - ./gradlew todo:artPub
+            - ./gradlew rxlifecycle:artPub
