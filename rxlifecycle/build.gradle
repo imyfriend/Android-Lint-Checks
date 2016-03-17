@@ -1,4 +1,3 @@
-apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: "com.jfrog.artifactory"
 
@@ -31,54 +30,11 @@ jar {
     }
 }
 
-configurations {
-    lintChecks
-}
-
-dependencies {
-    lintChecks files(jar)
-}
-
-defaultTasks 'assemble'
-
-task install(type: Copy) {
-    from configurations.lintChecks
-    into System.getProperty('user.home') + '/.android/lint/'
-}
-
-task copyLintJar(type: Copy) {
-    from(configurations.lintChecks) {
-        rename {
-            String fileName ->
-                'lint.jar'
-        }
-    }
-    into '../aarWrapper/build/intermediates/lint/'
-}
-
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-project.afterEvaluate {
-    def aarWrap = parent.project("aarWrapper").tasks.find { it.name == 'assemble' }
-    def pubTask = project.tasks.find { it.name == 'artifactoryPublish' }
-    pubTask.dependsOn(copyLintJar)
-    pubTask.dependsOn(aarWrap)
-    aarWrap.mustRunAfter(copyLintJar)
-}
-
 publishing {
     publications {
         aarWrapper(MavenPublication) {
             version version
-            artifact "../aarWrapper/build/outputs/aar/aarWrapper-release.aar"
+            artifact "build/$project.name-$version-release.aar"
             artifact sourcesJar
             artifact javadocJar
         }
