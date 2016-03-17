@@ -56,6 +56,16 @@ task copyLintJar(type: Copy) {
     into '../aarWrapper/build/intermediates/lint/'
 }
 
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 project.afterEvaluate {
     def aarWrap = parent.project("aarWrapper").tasks.find { it.name == 'assemble' }
     def pubTask = project.tasks.find { it.name == 'artifactoryPublish' }
@@ -69,6 +79,8 @@ publishing {
         aarWrapper(MavenPublication) {
             version version
             artifact "../aarWrapper/build/outputs/aar/aarWrapper-release.aar"
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
 }
