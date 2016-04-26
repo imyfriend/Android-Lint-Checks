@@ -63,7 +63,12 @@ subprojects {
     task aarWrapper << { }
 
     project.afterEvaluate {
-        def aarWrap = parent.project("aarWrapper").tasks.find { it.name == 'assemble' }
+        def aarProj = parent.project("aarWrapper")
+        aarProj.android.libraryVariants.forEach {
+            it.mergedFlavor.setApplicationId(it.applicationId + ".${project.name.toLowerCase()}")
+        }
+
+        def aarWrap = aarProj.tasks.find { it.name == 'assemble' }
         aarWrapper.dependsOn(copyLintJar)
         aarWrapper.dependsOn(aarWrap)
         aarWrapper.dependsOn(copyWrappedAAR)
