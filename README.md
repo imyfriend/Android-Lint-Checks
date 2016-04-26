@@ -9,13 +9,13 @@ Checks
 **RxLifecycle** - Ensures you are binding your Observable subscriptions to the lifecycle of an Activity, Fragment or View
  
 ~~~gradle
-  compile 'io.vokal.lint:rxlifecycle:1.0.0'
+  compile 'io.vokal.lint:rxlifecycle:1.0.3'
 ~~~
 
 **Todo** - Warns you of `//TODO` comments in your code
  
 ~~~gradle
-  compile 'io.vokal.lint:todo:1.0.0'
+  compile 'io.vokal.lint:todo:1.0.3'
 ~~~
 
 Compiling

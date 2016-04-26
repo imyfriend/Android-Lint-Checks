@@ -19,7 +19,7 @@ dependencies {
     testCompile 'com.android.tools:testutils:24.3.1'
 }
 
-version = '1.0.2'
+version = '1.0.3'
 
 jar {
     baseName project.group.replace(".", "-")
@@ -35,7 +35,7 @@ publishing {
     publications {
         aarWrapper(MavenPublication) {
             version version
-            artifact "build/$project.name-$version-release.aar"
+            artifact "build/libs/$project.name-$version-release.aar"
             artifact sourcesJar
             artifact javadocJar
         }
